@@ -1,9 +1,11 @@
 #include <gtest/gtest.h>
+#include "../include/parser.h"
 
 using namespace testing;
 
-TEST(program_tests, parser_test){
-  EXPECT_EQ(1, 1);
+TEST(parser_tests, integer_checking_test){
+  Parser parser;
+  parser.CheckNumLineCorrectness(std::string("1"));
 }
 
 

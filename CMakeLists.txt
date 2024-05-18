@@ -21,6 +21,10 @@ set(SOURCES
     src/parsed_event.cpp
 )
 
+#add_executable(main ${SOURCES})
+
+#target_include_directories(main PUBLIC ${PROJECT_SOURCE_DIR}/include)
+
 set(TESTS tests/parser_test.cpp)
 
 include(FetchContent)
@@ -34,7 +38,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 enable_testing()
-add_executable(my_googletest ${TESTS})
+add_executable(my_googletest ${TESTS} ${SOURCES})
 
 target_link_libraries(
   my_googletest
@@ -43,9 +47,8 @@ target_link_libraries(
 )
 
 include(GoogleTest)
+
 gtest_discover_tests(my_googletest)
 
-add_executable(main ${SOURCES})
-
-target_include_directories(main PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_include_directories(my_googletest PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
