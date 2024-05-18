@@ -1,15 +1,31 @@
-cmake_minimum_required(VERSION 3.10)
-project(TestProject)
+cmake_minimum_required(VERSION 3.20)
+project("test_task")
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
+#set(GOOGLETEST_VERSION 1.14.0)
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 
-add_executable(TestProject scheduler.cpp
-    time.h time.cpp
-    client_state.h client_state.cpp
-    event.h event.cpp
-    error_handler.h error_handler.cpp
-    table.h table.cpp
-    client.h client.cpp
-    club.h club.cpp
-    parser.h parser.cpp
-    simulation.h simulation.cpp)
+set(SOURCES
+    src/scheduler.cpp
+    src/time_struct.cpp
+    src/client_state.cpp
+    src/event.cpp
+    src/error_handler.cpp
+    src/table.cpp
+    src/client.cpp
+    src/club.cpp
+    src/parser.cpp
+    src/simulation.cpp
+    src/simulation_metadata.cpp
+    src/parsed_event.cpp
+)
+
+#enable_testing()
+
+#add_subdirectory(googletest)
+add_executable(main ${SOURCES})
+
+target_include_directories(main PUBLIC ${PROJECT_SOURCE_DIR}/include)
+
+#target_link_libraries(main gtest_main)

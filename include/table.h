@@ -1,7 +1,7 @@
 #ifndef TABLE_H
 #define TABLE_H
 
-#include "time.h"
+#include "time_struct.h"
 
 class Table{
  private:

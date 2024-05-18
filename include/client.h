@@ -7,9 +7,11 @@
 class Client{
  public:
   Client();
+  Client(std::string name);
+  Client(std::string name, Table* table);
  private:
-  std::string name;
-  Table* occupied_table = nullptr;
+  const std::string name_;
+  Table* occupied_table_;
 };
 
 #endif // CLIENT_H
