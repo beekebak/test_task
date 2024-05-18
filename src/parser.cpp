@@ -3,12 +3,18 @@
 #include "parser.h"
 
 bool Parser::CheckNumLineCorrectness(std::string line){
-  std::regex pattern("[0-9]+");
+  std::regex pattern("[1-9][0-9]*");
   return regex_match(line, pattern);
 }
 
 bool Parser::CheckSecondLineCorrectness(std::string line){
-  std::regex pattern("[[[0-1][0-9]]|[2[0-3]]]/.[[0-5][0-9]]");
+  std::regex pattern("(([0-1][0-9])|(2[0-3])):[0-5][0-9]\
+ (([0-1][0-9])|(2[0-3])):[0-5][0-9]");
+  return regex_match(line, pattern);
+}
+
+bool Parser::CheckEventCorrectness(std::string line){
+  std::regex pattern("((([0-1][0-9])|(2[0-3])):[0-5][0-9] [134] [a-z0-9_-]+)|((([0-1][0-9])|(2[0-3])):[0-5][0-9] 2 [a-z0-9_-]+ [1-9][0-9]*)");
   return regex_match(line, pattern);
 }
 
@@ -32,10 +38,10 @@ ParsedEvent Parser::ParseEvent(std::string line){
   if(code == 2){
     stream >> buffer;
     int table_index = stoi(buffer);
-    return ParsedEvent(event_time, static_cast<Event>(code),
+    return ParsedEvent(event_time, Event(code),
                               Client(client_name), table_index);
   }
-  return ParsedEvent(event_time, static_cast<Event>(code),
+  return ParsedEvent(event_time, Event(code),
                      Client(client_name));
 }
 

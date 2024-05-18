@@ -9,6 +9,8 @@ class Client{
   Client();
   Client(std::string name);
   Client(std::string name, Table* table);
+  bool operator==(const Client& other) const;
+  bool operator!=(const Client& other) const;
  private:
   const std::string name_;
   Table* occupied_table_;

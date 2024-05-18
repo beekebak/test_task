@@ -11,6 +11,8 @@ struct ParsedEvent{
   const int table_index_;
   ParsedEvent(Time time, Event event, Client client, int index);
   ParsedEvent(Time time, Event event, Client client);
+  bool operator==(const ParsedEvent& other) const;
+  bool operator!=(const ParsedEvent& other) const;
 };
 
 #endif // PARSED_EVENT_H

@@ -22,3 +22,10 @@ Time Time::operator-(const Time& time){
   return Time{time_value-time.time_value};
 }
 
+bool Time::operator== (const Time& other) const{
+  return other.time_value == time_value;
+}
+
+bool Time::operator!= (const Time& other) const{
+  return !(*(this) == other);
+}

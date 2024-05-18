@@ -11,6 +11,8 @@ struct SimulationMetadata{
   const int hourly_rate_;
   SimulationMetadata(int table_count, Time start_time, Time end_time,
                      int hourly_rate);
+  bool operator== (const SimulationMetadata& other) const;
+  bool operator!= (const SimulationMetadata& other) const;
 };
 
 #endif // SIMULATIONMETADATA_H

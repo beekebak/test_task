@@ -10,6 +10,8 @@ struct Time{
   Time(std::string time);
   Time operator+ (const Time& time);
   Time operator- (const Time& time);
+  bool operator== (const Time& other) const;
+  bool operator!= (const Time& other) const;
 };
 
 #endif // TIME_H
