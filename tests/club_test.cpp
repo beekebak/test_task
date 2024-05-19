@@ -4,7 +4,7 @@
 
 using namespace testing;;
 
-TEST(club_tests, EndDayGetterTest){
+TEST(club_test, EndDayGetterTest){
   Club club(4);
   club.AddClientToQueue("name1");
   club.AddClientToQueue("name2");
@@ -20,7 +20,7 @@ TEST(club_tests, EndDayGetterTest){
   ASSERT_THAT(club.GetRemainingClientNames(), ElementsAre("name1", "name2", "name4", "name5"));
 }
 
-TEST(club_tests, ChecksTest){
+TEST(club_test, ChecksTest){
   Club club(4);
   ASSERT_TRUE(club.CheckIfTableIsFree(0));
   ASSERT_FALSE(club.CheckIfClientInClub("name"));

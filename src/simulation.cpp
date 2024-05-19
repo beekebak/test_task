@@ -128,7 +128,7 @@ void Simulation::ProccessInput(){
       return;
     }
   }
-  club.EndDay(data.end_time_, data.hourly_rate_);
+  club.EndDay(data.end_time_, data.hourly_rate_, OutputHandler::PrintEvent);
   EndDay(data, club);
 }
 

@@ -85,10 +85,13 @@ void Club::RemoveClient(std::string client, Time event_time, int hourly_rate,
   }
 }
 
-void Club::EndDay(Time day_end_time, int hourly_rate){
+void Club::EndDay(Time day_end_time, int hourly_rate, std::function<void(Time,
+                  Event, std::string, int)> print_event_callback){
   for(auto pair:playing_clients){
     ChangeTableValues(pair.second.GetOccupiedTable(),
                       day_end_time-pair.second.GetLastSitTime(), hourly_rate);
+    print_event_callback(day_end_time, Event::kDayEnd, pair.first,
+                         pair.second.GetOccupiedTable());
   }
 }
 

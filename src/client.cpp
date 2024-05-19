@@ -13,15 +13,6 @@ int Client::GetOccupiedTable(){
   return occupied_table_;
 }
 
-bool Client::operator==(const Client& other) const{
-  return (other.table_change_time_ == table_change_time_ &&
-          other.occupied_table_ == occupied_table_);
-}
-
-bool Client::operator!=(const Client& other) const{
-  return !(*(this) == other);
-}
-
 void Client::ChangeTable(int new_table, Time new_sit_time){
   occupied_table_ = new_table;
   table_change_time_ = new_sit_time;

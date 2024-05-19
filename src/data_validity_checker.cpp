@@ -9,5 +9,6 @@ bool DataValidityChecker::CheckHeaderData(SimulationMetadata header){
 bool DataValidityChecker::CheckEventData(ParsedEvent event){
   if(event.time_ < last_checked_time_) return false;
   last_checked_time_ = event.time_;
+  if(event.table_index_ >= table_count_) return false;
   return true;
 }

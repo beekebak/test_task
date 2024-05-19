@@ -16,7 +16,7 @@ std::string ErrorHandler::GetErrorMessage(Error error){
     return "ClientUnknown";
     break;
    case Error::kClientCantWait:
-    return "ICanWaitNoLonger";
+    return "ICanWaitNoLonger!";
     break;
   }
   return "";

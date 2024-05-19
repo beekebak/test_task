@@ -4,7 +4,7 @@ project("test_task")
 set(CMAKE_CXX_STANDARD 20)
 set(GOOGLETEST_VERSION 1.14.0)
 
-#set(TESTMODE)
+set(TESTMODE "testing")
 
 if(DEFINED TESTMODE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
@@ -32,7 +32,8 @@ endif()
 if(DEFINED TESTMODE)
     set(TESTS
         tests/parser_test.cpp
-        tests/club_test.cpp)
+        tests/club_test.cpp
+        tests/data_validity_tests.cpp)
 
     include(FetchContent)
     FetchContent_Declare(
@@ -46,8 +47,8 @@ if(DEFINED TESTMODE)
 
     enable_testing()
     add_executable(my_googletest ${TESTS} ${SOURCES}
-        include/data_validity_checker.h
-        src/data_validity_checker.cpp)
+        tests/output_handler_tests.cpp
+        tests/simulation_test.cpp)
 
     target_link_libraries(
       my_googletest
