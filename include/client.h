@@ -3,19 +3,22 @@
 
 #include <string>
 #include "time_struct.h"
-
+/**
+ * @brief Contains taken desk and last time when desk was changed.
+ *
+ * By default table and time have unreachable values.
+ * Values only should be changed both at once by ChangeDesk method.
+ */
 class Client{
  public:
-  Client(int table, Time first_sit_time);
+  Client(int desk, Time first_sit_time);
   Client();
-  bool operator==(const Client& other) const;
-  bool operator!=(const Client& other) const;
-  void ChangeTable(int new_table, Time new_sit_time);
+  void ChangeDesk(int new_desk, Time new_sit_time);
   Time GetLastSitTime();
-  int GetOccupiedTable();
+  int GetOccupiedDesk();
  private:
-  int occupied_table_;
-  Time table_change_time_;
+  int occupied_desk_;
+  Time desk_change_time_;
 };
 
 #endif // CLIENT_H

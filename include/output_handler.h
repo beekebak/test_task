@@ -1,21 +1,30 @@
-#ifndef OUTPUT_HANDLER_H
-#define OUTPUT_HANDLER_H
+#ifndef output_handler_H
+#define output_handler_H
 
 #include <iostream>
 #include <vector>
 #include <fstream>
-#include "table.h"
+#include "desk.h"
 #include "error.h"
 #include "event.h"
 
-class OutputHandler{
- public:
-  void static PrintEvent(Time event_time, Event event_code, std::string client_name,
-                  int table_index);
-  void static PrintError(Time event_time, Error error_code);
-  void static PrintEndOfDayData(std::vector<Table> tables);
-  void static PrintTime(Time event_time);
-  void static PrintInvalidLine(std::string invalid_line);
+/**
+ * @brief Program output interface.
+ * Formats input to string and prints it to cout.
+ */
+namespace output_handler{
+  void PrintEvent(Time event_time, Event event_code, std::string client_name,
+                  int desk_index);
+  void PrintError(Time event_time, Error error_code);
+  /**
+   * @brief Print statistics of desk use during day.
+   */
+  void PrintEndOfDayData(std::vector<Desk> desks);
+  void PrintTime(Time event_time);
+  /**
+   * @brief Print single line which caused program stop.
+   */
+  void PrintInvalidLine(std::string invalid_line);
 };
 
-#endif // OUTPUT_HANDLER_H
+#endif // output_handler_H
