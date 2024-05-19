@@ -1,8 +1,7 @@
-#include <iostream>
-#include <unordered_map>
-#include <vector>
+#include "simulation.h"
 
-/*int main(int argc, char** argv){
-  std::cout << "alive" << std::endl;
+int main(int argc, char** argv){
+  Simulation Simulation(argv[1]);
+  Simulation.StartSimulation();
   return 0;
-}*/
+}

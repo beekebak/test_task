@@ -25,8 +25,9 @@ bool Simulation::CheckInputValidity(){
   header.push_back(line);
   if(!parser.CheckNumLineCorrectness(line)) return false;
   if(!data_checker.CheckHeaderData(parser.ParseHeader(header))) return false;
-  while(line != ""){
+  while(1){
     std::getline(input_file_stream, line);
+    if(line == "") break;
     if(!parser.CheckEventCorrectness(line)) return false;
     if(!data_checker.CheckEventData(parser.ParseEvent(line))) return false;
   }
@@ -104,26 +105,30 @@ void Simulation::ProccessInput(){
   OutputHandler::PrintTime(data.start_time_);
   std::string line;
   Club club(data.table_count_);
-  std::getline(input_file_stream, line);
-  while(line != ""){
+  while(1){
+    std::getline(input_file_stream, line);
+    if(line == "") break;
     ParsedEvent event = parser.ParseEvent(line);
+    OutputHandler::PrintEvent(event.time_, event.event_, event.client_,
+                              event.table_index_);
     switch(event.event_){
      case Event::kArrival:
       HandleClientArrived(data, event, club);
       break;
      case Event::kSit:
-      HandleClientArrived(data, event, club);
+      HandleClientSit(data, event, club);
       break;
      case Event::kWait:
-      HandleClientArrived(data, event, club);
+      HandleClientWait(data, event, club);
       break;
      case Event::kLeft:
-      HandleClientArrived(data, event, club);
+      HandleClientLeft(data, event, club);
       break;
      default:
       return;
     }
   }
+  club.EndDay(data.end_time_, data.hourly_rate_);
   EndDay(data, club);
 }
 

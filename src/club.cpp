@@ -85,6 +85,13 @@ void Club::RemoveClient(std::string client, Time event_time, int hourly_rate,
   }
 }
 
+void Club::EndDay(Time day_end_time, int hourly_rate){
+  for(auto pair:playing_clients){
+    ChangeTableValues(pair.second.GetOccupiedTable(),
+                      day_end_time-pair.second.GetLastSitTime(), hourly_rate);
+  }
+}
+
 void Club::AddClientToQueue(std::string client){
   clients_queue.push_back({client, Client()});
 }

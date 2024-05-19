@@ -3,9 +3,9 @@
 
 void OutputHandler::PrintEvent(Time event_time, Event event_code,
                           std::string client_name, int table_index){
-  if(event_code == Event::kSit && event_code == Event::kTookFreeTable){
+  if(event_code == Event::kSit || event_code == Event::kTookFreeTable){
     std::cout << event_time.ToString() << " " << static_cast<int>(event_code)
-              << " " << client_name << " " << table_index << std::endl;
+              << " " << client_name << " " << table_index+1 << std::endl;
   }
   else{
     std::cout << event_time.ToString() << " " << static_cast<int>(event_code)
