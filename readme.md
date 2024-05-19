@@ -9,3 +9,11 @@ for tests
   build
   on linux $my_googletest file
   on windows $my_googletest.exe file.txt 
+
+
+
+###############################################################################
+
+Found some ambiguousity. If id2 event happens it isn't said that id12 event
+should happen but in id12 event description it seems so. In my realization
+it happens.

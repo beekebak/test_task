@@ -19,9 +19,9 @@ set(SOURCES
     src/simulation.cpp
     src/simulation_metadata.cpp
     src/parsed_event.cpp
-    src/error_handler.cpp
     src/output_handler.cpp
     src/data_validity_checker.cpp
+    src/error.cpp
 )
 
 if(NOT DEFINED TESTMODE)

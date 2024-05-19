@@ -4,146 +4,156 @@
 #include "output_handler.h"
 
 Simulation::Simulation(std::string file_path){
-  input_file_stream = std::ifstream(file_path, std::ios::in);
+  input_file_stream_ = std::ifstream(file_path, std::ios::in);
 }
 
 Simulation::~Simulation(){
-  input_file_stream.close();
+  input_file_stream_.close();
 }
+
+/**
+ * For each line both format of input and data invariants should be checked.
+ * Format is checked by parser functions.
+ * Data validity is chekced by DataValidityChecker.
+ * First 3 lines form a header which has check logic compared to events.
+ *
+ * @return String that violated format or invariants if present empty string
+ * otherwise.
+ */
 
 std::string Simulation::CheckInputValidity(){
   DataValidityChecker data_checker;
   std::string line;
   std::vector<std::string> header;
-  std::getline(input_file_stream, line);
+  std::getline(input_file_stream_, line);
   header.push_back(line);
-  if(!parser.CheckNumLineCorrectness(line)) return line;
-  std::getline(input_file_stream, line);
+  if(!parser::CheckNumLineCorrectness(line)) return line;
+  std::getline(input_file_stream_, line);
   header.push_back(line);
-  if(!parser.CheckSecondLineCorrectness(line)) return line;
-  std::getline(input_file_stream, line);
+  if(!parser::CheckSecondLineCorrectness(line)) return line;
+  std::getline(input_file_stream_, line);
   header.push_back(line);
-  if(!parser.CheckNumLineCorrectness(line)) return line;
-  if(!data_checker.CheckHeaderData(parser.ParseHeader(header))) return line;
+  if(!parser::CheckNumLineCorrectness(line)) return line;
+  if(!data_checker.CheckHeaderData(parser::ParseHeader(header))) return line;
+  data_ptr_ = std::make_unique<SimulationMetadata>
+      (SimulationMetadata(parser::ParseHeader(header)));
+  club_ptr_ = std::make_unique<Club>(Club(data_ptr_->desk_count_));
   while(1){
-    std::getline(input_file_stream, line);
+    std::getline(input_file_stream_, line);
     if(line == "") break;
-    if(!parser.CheckEventCorrectness(line)) return line;
-    if(!data_checker.CheckEventData(parser.ParseEvent(line))) return line;
+    if(!parser::CheckEventCorrectness(line)) return line;
+    if(!data_checker.CheckEventData(parser::ParseEvent(line))) return line;
   }
-  input_file_stream.clear();
-  input_file_stream.seekg(0, std::ios::beg);
+  input_file_stream_.clear();
+  input_file_stream_.seekg(0, std::ios::beg);
   return "";
 }
 
-SimulationMetadata Simulation::GetData(){
-  std::string line;
-  std::vector<std::string> header;
-  for(int i = 0; i < 3; i++){
-    std::getline(input_file_stream, line);
-    header.push_back(line);
+void Simulation::HandleClientArrived(ParsedEvent& event_data){
+  if(event_data.time_ < data_ptr_->start_time_ || data_ptr_->end_time_ < event_data.time_){
+    output_handler::PrintError(event_data.time_, Error::kClosed);
+    return;
   }
-  return parser.ParseHeader(header);
+  if(club_ptr_->CheckIfClientInClub(event_data.client_)){
+    output_handler::PrintError(event_data.time_, Error::kClientAlreadyInClub);
+    return;
+  }
+  club_ptr_->AddClientToQueue(event_data.client_);
 }
 
-void Simulation::HandleClientArrived(SimulationMetadata& data,
-                                     ParsedEvent& event_data, Club& club){
-  if(event_data.time_ < data.start_time_ || data.end_time_ < event_data.time_){
-    OutputHandler::PrintError(event_data.time_, Error::kClosed);
+void Simulation::HandleClientSit(ParsedEvent& event_data){
+  if(!club_ptr_->CheckIfDeskIsFree(event_data.desk_index_)){
+    output_handler::PrintError(event_data.time_, Error::kDeskIsBusy);
     return;
   }
-  if(club.CheckIfClientInClub(event_data.client_)){
-    OutputHandler::PrintError(event_data.time_, Error::kClientAlreadyInClub);
+  if(!club_ptr_->CheckIfClientInClub(event_data.client_)){
+    output_handler::PrintError(event_data.time_, Error::kClientUnknown);
     return;
   }
-  club.AddClientToQueue(event_data.client_);
+  club_ptr_->MoveClient(event_data.desk_index_, event_data.client_, event_data.time_,
+                  data_ptr_->hourly_rate_, output_handler::PrintEvent);
 }
 
-void Simulation::HandleClientSit(SimulationMetadata& data,
-                                 ParsedEvent& event_data, Club& club){
-  if(!club.CheckIfTableIsFree(event_data.table_index_)){
-    OutputHandler::PrintError(event_data.time_, Error::kTableIsBusy);
+void Simulation::HandleClientWait(ParsedEvent& event_data){
+  if(club_ptr_->CheckIfThereAreFreePlaces()){
+    output_handler::PrintError(event_data.time_, Error::kClientCantWait);
     return;
   }
-  if(!club.CheckIfClientInClub(event_data.client_)){
-    OutputHandler::PrintError(event_data.time_, Error::kClientUnknown);
-    return;
-  }
-  club.MoveClient(event_data.table_index_, event_data.client_, event_data.time_,
-                  data.hourly_rate_, OutputHandler::PrintEvent);
-}
-
-void Simulation::HandleClientWait(SimulationMetadata& data,
-                                  ParsedEvent& event_data, Club& club){
-  if(club.CheckIfThereAreFreePlaces()){
-    OutputHandler::PrintError(event_data.time_, Error::kClientCantWait);
-    return;
-  }
-  if(club.CheckIfQueueTooBig()){
-    club.RemoveClient(event_data.client_, event_data.time_, data.hourly_rate_,
-                      OutputHandler::PrintEvent);
+  if(club_ptr_->CheckIfQueueIsTooBig()){
+    club_ptr_->RemoveClient(event_data.client_, event_data.time_, data_ptr_->hourly_rate_,
+                      output_handler::PrintEvent);
   }
 }
 
-void Simulation::HandleClientLeft(SimulationMetadata& data,
-                                  ParsedEvent& event_data, Club& club){
-  if(!club.CheckIfClientInClub(event_data.client_)){
-    OutputHandler::PrintError(event_data.time_, Error::kClientUnknown);
+void Simulation::HandleClientLeft(ParsedEvent& event_data){
+  if(!club_ptr_->CheckIfClientInClub(event_data.client_)){
+    output_handler::PrintError(event_data.time_, Error::kClientUnknown);
     return;
   }
-  club.RemoveClient(event_data.client_, event_data.time_, data.hourly_rate_,
-                    OutputHandler::PrintEvent);
+  club_ptr_->RemoveClient(event_data.client_, event_data.time_, data_ptr_->hourly_rate_,
+                    output_handler::PrintEvent);
 }
 
-void Simulation::EndDay(SimulationMetadata& data, Club& club){
-  std::set<std::string> left = club.GetRemainingClientNames();
+/**
+ * @brief Finishing function.
+ *
+ * Prints remaining by the close time clients names, time, tables statistics.
+ */
+
+void Simulation::EndDay(){
+  std::set<std::string> left = club_ptr_->GetRemainingClientNames();
   for(auto client:left){
-    OutputHandler::PrintEvent(data.end_time_, Event::kDayEndOrLeft, client, -1);
+    output_handler::PrintEvent(data_ptr_->end_time_, Event::kDayEndOrLeft, client, -1);
   }
-  OutputHandler::PrintTime(data.end_time_);
-  OutputHandler::PrintEndOfDayData(club.GetTables());
+  output_handler::PrintTime(data_ptr_->end_time_);
+  output_handler::PrintEndOfDayData(club_ptr_->GetDesks());
 }
+
+/**
+ * @brief Reads line and delegates event to handler function.
+ *
+ * Calls finishing functions for both simulation and club.
+ */
 
 void Simulation::ProccessInput(){
-  SimulationMetadata data = GetData();
-  OutputHandler::PrintTime(data.start_time_);
+  output_handler::PrintTime(data_ptr_->start_time_);
   std::string line;
-  Club club(data.table_count_);
+  for(int i = 0; i < 3; i++) std::getline(input_file_stream_, line); //skip header
   while(1){
-    std::getline(input_file_stream, line);
+    std::getline(input_file_stream_, line);
     if(line == "") break;
-    ParsedEvent event = parser.ParseEvent(line);
-    OutputHandler::PrintEvent(event.time_, event.event_, event.client_,
-                              event.table_index_);
+    ParsedEvent event = parser::ParseEvent(line);
+    output_handler::PrintEvent(event.time_, event.event_, event.client_,
+                              event.desk_index_);
     switch(event.event_){
      case Event::kArrival:
-      HandleClientArrived(data, event, club);
+      HandleClientArrived(event);
       break;
      case Event::kSit:
-      HandleClientSit(data, event, club);
+      HandleClientSit(event);
       break;
      case Event::kWait:
-      HandleClientWait(data, event, club);
+      HandleClientWait(event);
       break;
      case Event::kLeft:
-      HandleClientLeft(data, event, club);
+      HandleClientLeft(event);
       break;
      default:
       return;
     }
   }
-  club.EndDay(data.end_time_, data.hourly_rate_);
-  EndDay(data, club);
+  club_ptr_->EndDay(data_ptr_->end_time_, data_ptr_->hourly_rate_);
+  EndDay();
 }
 
 void Simulation::StartSimulation(){
-  if(!input_file_stream.is_open()){
+  if(!input_file_stream_.is_open()){
     std::cerr << "Cannot open the file" << std::endl;
     return;
   }
   std::string check_line = CheckInputValidity();
   if(check_line != "") {
-    OutputHandler::PrintInvalidLine(check_line);
+    output_handler::PrintInvalidLine(check_line);
     return;
   }
   ProccessInput();
