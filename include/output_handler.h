@@ -10,11 +10,11 @@
 
 class OutputHandler{
  public:
-  void PrintEvent(Time event_time, Event event_code, std::string client_name,
+  void static PrintEvent(Time event_time, Event event_code, std::string client_name,
                   int table_index);
-  void PrintError(Time event_time, Error error_code);
-  void PrintEndOfDayData(std::vector<Table> tables);
-  void PrintTime(Time event_time);
+  void static PrintError(Time event_time, Error error_code);
+  void static PrintEndOfDayData(std::vector<Table> tables);
+  void static PrintTime(Time event_time);
 };
 
 #endif // OUTPUT_HANDLER_H

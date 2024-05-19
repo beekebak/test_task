@@ -37,8 +37,8 @@ std::vector<Table> Club::GetTables(){
 }
 
 void Club::ChangeTableValues(int index,  Time diff, int hourly_rate){
-  tables[index].used_time.time_value += diff.time_value;
-  tables[index].earned_money += diff.time_value * hourly_rate;
+  tables[index].used_time += diff;
+  tables[index].earned_money += diff.GetHoursCeil() * hourly_rate;
 }
 
 void Club::TakeEmptyTable(int index, Time event_time,
