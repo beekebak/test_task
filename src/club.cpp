@@ -42,21 +42,21 @@ void Club::ChangeTableValues(int index,  Time diff, int hourly_rate){
 }
 
 void Club::TakeEmptyTable(int index, Time event_time,
-                          std::function<void(Time, std::string, int)>
+                          std::function<void(Time, Event, std::string, int)>
                           print_event_callback){
   if(clients_queue.size() > 0){
     std::pair<std::string, Client> new_client = clients_queue.front();
     clients_queue.pop_front();
     new_client.second.ChangeTable(index, event_time);
     playing_clients[new_client.first] = new_client.second;
-    print_event_callback(event_time, new_client.first, index);
+    print_event_callback(event_time, Event::kTookFreeTable, new_client.first, index);
     tables[index].client_is_present = true;
   }
   else tables[index].client_is_present = false;
 }
 
 void Club::MoveClientBetweenTables(int index, std::string client, Time event_time,
-                       int hourly_rate, std::function<void(Time, std::string, int)>
+                       int hourly_rate, std::function<void(Time, Event, std::string, int)>
                                                         print_event_callback){
   Time time_diff = event_time - playing_clients[client].GetLastSitTime();
   playing_clients[client].ChangeTable(index, event_time);
@@ -66,7 +66,7 @@ void Club::MoveClientBetweenTables(int index, std::string client, Time event_tim
 }
 
 void Club::RemoveClient(std::string client, Time event_time, int hourly_rate,
-                        std::function<void(Time, std::string, int)>
+                        std::function<void(Time, Event, std::string, int)>
                         print_event_callback){
   if(playing_clients.find(client) != playing_clients.end()){
     int index = playing_clients[client].GetOccupiedTable();
@@ -102,7 +102,7 @@ void Club::LandClientToTable(int index, std::string client, Time event_time){
 }
 
 void Club::MoveClient(int index, std::string client, Time event_time,
-                      int hourly_rate, std::function<void(Time, std::string, int)>
+                      int hourly_rate, std::function<void(Time, Event, std::string, int)>
                       print_event_callback){
   if(playing_clients.find(client) != playing_clients.end()){
     MoveClientBetweenTables(index, client, event_time, hourly_rate,

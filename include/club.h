@@ -8,6 +8,7 @@
 #include <functional>
 #include <utility>
 #include "table.h"
+#include "event.h"
 #include "client.h"
 
 class Club{
@@ -20,18 +21,18 @@ class Club{
   std::set<std::string> GetRemainingClientNames();
   std::vector<Table> GetTables();
   void MoveClient(int index, std::string client, Time event_time,
-                  int hourly_rate, std::function<void(Time, std::string, int)>
+                  int hourly_rate, std::function<void(Time, Event, std::string, int)>
                   print_event_callback);
   void AddClientToQueue(std::string client);
   void RemoveClient(std::string client, Time event_time, int hourly_rate,
-                    std::function<void(Time, std::string, int)>
+                    std::function<void(Time, Event, std::string, int)>
                     print_event_callback);
  private:
   void TakeEmptyTable(int index, Time event_time,
-                      std::function<void(Time, std::string, int)>
+                      std::function<void(Time, Event, std::string, int)>
                       print_event_callback);
   void MoveClientBetweenTables(int index, std::string client, Time event_time,
-                  int hourly_rate,  std::function<void(Time, std::string, int)>
+                  int hourly_rate,  std::function<void(Time, Event, std::string, int)>
                                                     print_event_callback);
   void LandClientToTable(int index, std::string client, Time event_time);
   void ChangeTableValues(int index, Time diff, int hourly_rate);

@@ -29,3 +29,13 @@ bool Time::operator== (const Time& other) const{
 bool Time::operator!= (const Time& other) const{
   return !(*(this) == other);
 }
+
+std::string Time::ToString(){
+  int hours = time_value / 60;
+  int minutes = time_value % 60;
+  std::string hours_representation = hours > 9 ? std::to_string(hours) :
+                                         "0"+std::to_string(hours);
+  std::string minutes_representation = minutes > 9 ? std::to_string(minutes) :
+                                         "0"+std::to_string(minutes);
+  return hours_representation + ":" + minutes_representation;
+}

@@ -1,6 +1,8 @@
 #ifndef EVENT_H
 #define EVENT_H
 
+#include <string>
+
 enum class Event{
   kArrival=1,
   kSit=2,

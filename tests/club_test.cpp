@@ -11,7 +11,7 @@ TEST(club_tests, EndDayGetterTest){
   club.AddClientToQueue("name3");
   club.AddClientToQueue("name4");
   club.AddClientToQueue("name5");
-  auto printLambda = [](Time time, std::string name, int index){};
+  auto printLambda = [](Time time, Event, std::string name, int index){};
   club.MoveClient(1, "name2", Time(10), 10, printLambda);
   club.MoveClient(2, "name3", Time(10), 10, printLambda);
   club.MoveClient(3, "name4", Time(10), 10, printLambda);
@@ -33,7 +33,7 @@ TEST(club_tests, ChecksTest){
   club.AddClientToQueue("name5");
   ASSERT_TRUE(club.CheckIfQueueTooBig());
   ASSERT_TRUE(club.CheckIfClientInClub("name1"));
-  auto printLambda = [](Time time, std::string name, int index){};
+  auto printLambda = [](Time time, Event, std::string name, int index){};
   club.MoveClient(0, "name1", Time(10), 10, printLambda);
   ASSERT_FALSE(club.CheckIfQueueTooBig());
   ASSERT_FALSE(club.CheckIfTableIsFree(0));

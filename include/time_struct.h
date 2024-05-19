@@ -12,6 +12,7 @@ struct Time{
   Time operator- (const Time& time);
   bool operator== (const Time& other) const;
   bool operator!= (const Time& other) const;
+  std::string ToString();
 };
 
 #endif // TIME_H

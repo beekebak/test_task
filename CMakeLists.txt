@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project("test_task")
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(GOOGLETEST_VERSION 1.14.0)
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
@@ -9,7 +9,6 @@ set(GOOGLETEST_VERSION 1.14.0)
 set(SOURCES
     src/scheduler.cpp
     src/time_struct.cpp
-    src/client_state.cpp
     src/client.cpp
     src/club.cpp
     src/parser.cpp
@@ -17,13 +16,16 @@ set(SOURCES
     src/simulation_metadata.cpp
     src/parsed_event.cpp
     src/error_handler.cpp
+    src/output_handler.cpp
 )
 
 #add_executable(main ${SOURCES})
 
 #target_include_directories(main PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
-set(TESTS tests/parser_test.cpp)
+set(TESTS
+    tests/parser_test.cpp
+    tests/club_test.cpp)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -36,8 +38,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 enable_testing()
-add_executable(my_googletest ${TESTS} ${SOURCES}
-    tests/club_test.cpp)
+add_executable(my_googletest ${TESTS} ${SOURCES})
 
 target_link_libraries(
   my_googletest

@@ -2,11 +2,11 @@
 #define ERROR_HANDLER_H
 
 #include "error.h"
-#include <string>
+#include <iostream>
 
 class ErrorHandler{
  public:
-  std::string GetErrorMessage(Error error);
+  std::string static GetErrorMessage(Error error);
 };
 
 #endif // ERROR_HANDLER_H
