@@ -50,6 +50,7 @@ void Club::TakeEmptyTable(int index, Time event_time,
     new_client.second.ChangeTable(index, event_time);
     playing_clients[new_client.first] = new_client.second;
     print_event_callback(event_time, new_client.first, index);
+    tables[index].client_is_present = true;
   }
   else tables[index].client_is_present = false;
 }
@@ -94,6 +95,7 @@ void Club::LandClientToTable(int index, std::string client, Time event_time){
       iter->second.ChangeTable(index, event_time);
       playing_clients[iter->first] = iter->second;
       clients_queue.erase(iter);
+      tables[index].client_is_present = true;
       break;
     }
   }

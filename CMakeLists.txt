@@ -36,10 +36,12 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 enable_testing()
-add_executable(my_googletest ${TESTS} ${SOURCES})
+add_executable(my_googletest ${TESTS} ${SOURCES}
+    tests/club_test.cpp)
 
 target_link_libraries(
   my_googletest
+  GTest::gmock
   GTest::gtest
   GTest::gtest_main
 )
