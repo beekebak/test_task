@@ -59,9 +59,9 @@ void Club::MoveClientBetweenTables(int index, std::string client, Time event_tim
                        int hourly_rate, std::function<void(Time, Event, std::string, int)>
                                                         print_event_callback){
   Time time_diff = event_time - playing_clients[client].GetLastSitTime();
-  playing_clients[client].ChangeTable(index, event_time);
   ChangeTableValues(playing_clients[client].GetOccupiedTable(), time_diff,
                     hourly_rate);
+  playing_clients[client].ChangeTable(index, event_time);
   TakeEmptyTable(index, event_time, print_event_callback);
 }
 
@@ -78,6 +78,8 @@ void Club::RemoveClient(std::string client, Time event_time, int hourly_rate,
   else{
     for(auto iter = clients_queue.begin(); iter < clients_queue.end(); iter++){
       if(iter->first == client){
+        print_event_callback(event_time, Event::kDayEndOrLeft, client,
+                             iter->second.GetOccupiedTable());
         clients_queue.erase(iter);
         break;
       }
@@ -85,13 +87,10 @@ void Club::RemoveClient(std::string client, Time event_time, int hourly_rate,
   }
 }
 
-void Club::EndDay(Time day_end_time, int hourly_rate, std::function<void(Time,
-                  Event, std::string, int)> print_event_callback){
+void Club::EndDay(Time day_end_time, int hourly_rate){
   for(auto pair:playing_clients){
     ChangeTableValues(pair.second.GetOccupiedTable(),
                       day_end_time-pair.second.GetLastSitTime(), hourly_rate);
-    print_event_callback(day_end_time, Event::kDayEnd, pair.first,
-                         pair.second.GetOccupiedTable());
   }
 }
 

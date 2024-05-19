@@ -1,0 +1,14 @@
+09:00
+09:41 1 client1
+09:48 1 client2
+09:52 2 notclient 1
+09:52 13 ClientUnknown
+09:54 4 notclient2
+09:54 13 ClientUnknown
+10:58 1 client1
+10:58 13 YouShallNotPass
+19:00 11 client1
+19:00 11 client2
+19:00
+1 0 00:00
+2 0 00:00

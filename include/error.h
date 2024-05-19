@@ -2,7 +2,6 @@
 #define ERROR_H
 
 enum class Error{
-  kNoError,
   kClosed,
   kClientAlreadyInClub,
   kTableIsBusy,

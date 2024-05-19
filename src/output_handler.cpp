@@ -28,3 +28,7 @@ void OutputHandler::PrintEndOfDayData(std::vector<Table> tables){
         tables[i].used_time.ToString() << std::endl;
   }
 }
+
+void OutputHandler::PrintInvalidLine(std::string line){
+  std::cout << line << std::endl;
+}

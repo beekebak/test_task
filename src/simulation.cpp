@@ -11,29 +11,29 @@ Simulation::~Simulation(){
   input_file_stream.close();
 }
 
-bool Simulation::CheckInputValidity(){
+std::string Simulation::CheckInputValidity(){
   DataValidityChecker data_checker;
   std::string line;
   std::vector<std::string> header;
   std::getline(input_file_stream, line);
   header.push_back(line);
-  if(!parser.CheckNumLineCorrectness(line)) return false;
+  if(!parser.CheckNumLineCorrectness(line)) return line;
   std::getline(input_file_stream, line);
   header.push_back(line);
-  if(!parser.CheckSecondLineCorrectness(line)) return false;
+  if(!parser.CheckSecondLineCorrectness(line)) return line;
   std::getline(input_file_stream, line);
   header.push_back(line);
-  if(!parser.CheckNumLineCorrectness(line)) return false;
-  if(!data_checker.CheckHeaderData(parser.ParseHeader(header))) return false;
+  if(!parser.CheckNumLineCorrectness(line)) return line;
+  if(!data_checker.CheckHeaderData(parser.ParseHeader(header))) return line;
   while(1){
     std::getline(input_file_stream, line);
     if(line == "") break;
-    if(!parser.CheckEventCorrectness(line)) return false;
-    if(!data_checker.CheckEventData(parser.ParseEvent(line))) return false;
+    if(!parser.CheckEventCorrectness(line)) return line;
+    if(!data_checker.CheckEventData(parser.ParseEvent(line))) return line;
   }
   input_file_stream.clear();
   input_file_stream.seekg(0, std::ios::beg);
-  return true;
+  return "";
 }
 
 SimulationMetadata Simulation::GetData(){
@@ -96,6 +96,10 @@ void Simulation::HandleClientLeft(SimulationMetadata& data,
 }
 
 void Simulation::EndDay(SimulationMetadata& data, Club& club){
+  std::set<std::string> left = club.GetRemainingClientNames();
+  for(auto client:left){
+    OutputHandler::PrintEvent(data.end_time_, Event::kDayEndOrLeft, client, -1);
+  }
   OutputHandler::PrintTime(data.end_time_);
   OutputHandler::PrintEndOfDayData(club.GetTables());
 }
@@ -128,7 +132,7 @@ void Simulation::ProccessInput(){
       return;
     }
   }
-  club.EndDay(data.end_time_, data.hourly_rate_, OutputHandler::PrintEvent);
+  club.EndDay(data.end_time_, data.hourly_rate_);
   EndDay(data, club);
 }
 
@@ -137,6 +141,10 @@ void Simulation::StartSimulation(){
     std::cerr << "Cannot open the file" << std::endl;
     return;
   }
-  if(!CheckInputValidity()) return;
+  std::string check_line = CheckInputValidity();
+  if(check_line != "") {
+    OutputHandler::PrintInvalidLine(check_line);
+    return;
+  }
   ProccessInput();
 }
