@@ -15,6 +15,7 @@ class OutputHandler{
   void static PrintError(Time event_time, Error error_code);
   void static PrintEndOfDayData(std::vector<Table> tables);
   void static PrintTime(Time event_time);
+  void static PrintInvalidLine(std::string invalid_line);
 };
 
 #endif // OUTPUT_HANDLER_H

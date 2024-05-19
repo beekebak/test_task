@@ -2,8 +2,6 @@
 
 std::string ErrorHandler::GetErrorMessage(Error error){
   switch (error){
-   case Error::kNoError:
-    break;
    case Error::kClosed:
     return "NotOpenYet";
    case Error::kClientAlreadyInClub:

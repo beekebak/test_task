@@ -14,7 +14,7 @@ class Simulation{
   void StartSimulation();
  private:
   Parser parser;
-  bool CheckInputValidity();
+  std::string CheckInputValidity();
   void ProccessInput();
   void HandleClientArrived(SimulationMetadata& data, ParsedEvent& event_data,
                            Club& club);
