@@ -4,7 +4,7 @@ project("test_task")
 set(CMAKE_CXX_STANDARD 20)
 set(GOOGLETEST_VERSION 1.14.0)
 
-set(TESTMODE "testing")
+#set(TESTMODE "testing")
 
 if(DEFINED TESTMODE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
