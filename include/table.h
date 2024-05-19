@@ -3,10 +3,10 @@
 
 #include "time_struct.h"
 
-class Table{
- private:
+struct Table{
+ public:
   bool client_is_present = false;
-  Time used_time = Time(0,0);
+  Time used_time = Time(0);
   int earned_money = 0;
 };
 

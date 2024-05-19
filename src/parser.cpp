@@ -38,11 +38,9 @@ ParsedEvent Parser::ParseEvent(std::string line){
   if(code == 2){
     stream >> buffer;
     int table_index = stoi(buffer);
-    return ParsedEvent(event_time, Event(code),
-                              Client(client_name), table_index);
+    return ParsedEvent(event_time, Event(code), client_name, table_index);
   }
-  return ParsedEvent(event_time, Event(code),
-                     Client(client_name));
+  return ParsedEvent(event_time, Event(code), client_name);
 }
 
 

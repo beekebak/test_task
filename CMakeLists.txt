@@ -10,15 +10,13 @@ set(SOURCES
     src/scheduler.cpp
     src/time_struct.cpp
     src/client_state.cpp
-    src/event.cpp
-    src/error_handler.cpp
-    src/table.cpp
     src/client.cpp
     src/club.cpp
     src/parser.cpp
     src/simulation.cpp
     src/simulation_metadata.cpp
     src/parsed_event.cpp
+    src/error_handler.cpp
 )
 
 #add_executable(main ${SOURCES})
