@@ -4,64 +4,64 @@
 
 using namespace testing;
 
-TEST(OutputHandlerTest, PrintEventFormatTest){
+TEST(output_handlerTest, PrintEventFormatTest){
   testing::internal::CaptureStdout();
-  OutputHandler::PrintEvent(Time(1, 10), Event::kArrival, "client", -1);
+  output_handler::PrintEvent(Time(1, 10), Event::kArrival, "client", -1);
   std::string buffer = testing::internal::GetCapturedStdout();
   ASSERT_EQ("01:10 1 client\n", buffer);
   testing::internal::CaptureStdout();
-  OutputHandler::PrintEvent(Time(23, 0), Event::kTookFreeTable, "client", 3);
+  output_handler::PrintEvent(Time(23, 0), Event::kTookFreeDesk, "client", 3);
   buffer = testing::internal::GetCapturedStdout();
   ASSERT_EQ("23:00 12 client 4\n", buffer);
   testing::internal::CaptureStdout();
-  OutputHandler::PrintEvent(Time(23, 0), Event::kArrival, "client", 3);
+  output_handler::PrintEvent(Time(23, 0), Event::kArrival, "client", 3);
   buffer = testing::internal::GetCapturedStdout();
   ASSERT_NE("23:00 12 client 4\n", buffer);
   testing::internal::CaptureStdout();
-  OutputHandler::PrintEvent(Time(23, 0), Event::kTookFreeTable, "client", 4);
+  output_handler::PrintEvent(Time(23, 0), Event::kTookFreeDesk, "client", 4);
   buffer = testing::internal::GetCapturedStdout();
   ASSERT_NE("23:00 12 client\n", buffer);
   testing::internal::CaptureStdout();
-  OutputHandler::PrintEvent(Time(23, 0), Event::kArrival, "client1", 3);
+  output_handler::PrintEvent(Time(23, 0), Event::kArrival, "client1", 3);
   buffer = testing::internal::GetCapturedStdout();
   ASSERT_NE("23:00 1 client\n", buffer);
   testing::internal::CaptureStdout();
-  OutputHandler::PrintEvent(Time(23, 23), Event::kArrival, "client", 3);
+  output_handler::PrintEvent(Time(23, 23), Event::kArrival, "client", 3);
   buffer = testing::internal::GetCapturedStdout();
   ASSERT_NE("23:00 1 client\n", buffer);
   testing::internal::CaptureStdout();
-  OutputHandler::PrintEvent(Time(23, 0), Event::kWait, "client", 3);
+  output_handler::PrintEvent(Time(23, 0), Event::kWait, "client", 3);
   buffer = testing::internal::GetCapturedStdout();
   ASSERT_NE("23:00 1 client\n", buffer);
 }
 
-TEST(OutputHandlerTest, PrintError){
+TEST(output_handlerTest, PrintError){
   testing::internal::CaptureStdout();
-  OutputHandler::PrintError(Time(1, 10), Error::kClientAlreadyInClub);
+  output_handler::PrintError(Time(1, 10), Error::kClientAlreadyInClub);
   std::string buffer = testing::internal::GetCapturedStdout();
   ASSERT_EQ("01:10 13 YouShallNotPass\n", buffer);
   testing::internal::CaptureStdout();
-  OutputHandler::PrintError(Time(1, 10), Error::kClientCantWait);
+  output_handler::PrintError(Time(1, 10), Error::kClientCantWait);
   buffer = testing::internal::GetCapturedStdout();
   ASSERT_NE("01:10 13 YouShallNotPass\n", buffer);
 }
 
-TEST(OutputHandlerTest, PrintTime){
+TEST(output_handlerTest, PrintTime){
   testing::internal::CaptureStdout();
-  OutputHandler::PrintTime(Time(1, 10));
+  output_handler::PrintTime(Time(1, 10));
   std::string buffer = testing::internal::GetCapturedStdout();
   ASSERT_EQ(buffer, "01:10\n");
 }
 
-TEST(OutputHandlerTest, PrintEndOfDatData){
-  std::vector<Table> tables(3);
+TEST(output_handlerTest, PrintEndOfDatData){
+  std::vector<Desk> desks(3);
   for(int i = 0; i < 3; i++){
-    tables[i].earned_money = (i+1)*10+i;
-    tables[i].used_time = Time(i * 62 + 20);
+    desks[i].earned_money = (i+1)*10+i;
+    desks[i].used_time = Time(i * 62 + 20);
   }
   std::string expected = "1 10 00:20\n2 21 01:22\n3 32 02:24\n";
   testing::internal::CaptureStdout();
-  OutputHandler::PrintEndOfDayData(tables);
+  output_handler::PrintEndOfDayData(desks);
   std::string buffer = testing::internal::GetCapturedStdout();
   ASSERT_EQ(buffer, expected);
 }
