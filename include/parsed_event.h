@@ -16,12 +16,12 @@
  */
 
 struct ParsedEvent{
-  const Time time_;
-  const Event event_;
-  const std::string client_;
-  const int desk_index_;
-  ParsedEvent(Time time, Event event, std::string client, int index);
-  ParsedEvent(Time time, Event event, std::string client);
+  Time time_;
+  Event event_;
+  std::string client_;
+  int desk_index_;
+  ParsedEvent(Time time, Event event, std::string& client, int index);
+  ParsedEvent(Time time, Event event, std::string& client);
   bool operator==(const ParsedEvent& other) const;
   bool operator!=(const ParsedEvent& other) const;
 };

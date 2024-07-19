@@ -1,10 +1,11 @@
-#include "simulation.h"
 #include <iostream>
+#include "simulation.h"
 #include "data_validity_checker.h"
 #include "output_handler.h"
 
 Simulation::Simulation(std::string file_path){
   input_file_stream_ = std::ifstream(file_path, std::ios::in);
+  if(input_file_stream_.bad()) throw std::string("Couldn't open file");
 }
 
 Simulation::~Simulation(){
@@ -71,7 +72,7 @@ void Simulation::HandleClientSit(ParsedEvent& event_data){
     return;
   }
   club_ptr_->MoveClient(event_data.desk_index_, event_data.client_, event_data.time_,
-                  data_ptr_->hourly_rate_, output_handler::PrintEvent);
+                  data_ptr_->hourly_rate_, std::function(output_handler::PrintEvent));
 }
 
 void Simulation::HandleClientWait(ParsedEvent& event_data){

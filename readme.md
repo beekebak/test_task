@@ -9,7 +9,8 @@ for tests
   build
   on linux $my_googletest file
   on windows $my_googletest.exe file.txt 
-
+To start application run 
+  ./main "path_to_file"
 
 
 ###############################################################################

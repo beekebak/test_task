@@ -24,7 +24,7 @@ namespace output_handler{
   /**
    * @brief Print single line which caused program stop.
    */
-  void PrintInvalidLine(std::string invalid_line);
+  void PrintInvalidLine(std::string& invalid_line);
 };
 
 #endif // output_handler_H

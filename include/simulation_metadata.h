@@ -12,10 +12,10 @@
 
 struct SimulationMetadata{
  public:
-  const int desk_count_;
-  const Time start_time_;
-  const Time end_time_;
-  const int hourly_rate_;
+  int desk_count_;
+  Time start_time_;
+  Time end_time_;
+  int hourly_rate_;
   SimulationMetadata(int desk_count, Time start_time, Time end_time,
                      int hourly_rate);
   SimulationMetadata(SimulationMetadata&& other) = default;

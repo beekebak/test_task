@@ -15,18 +15,18 @@ namespace parser{
   /**
    * @param Should be either 1 or 3 line of input file.
    */
-  bool CheckNumLineCorrectness(std::string line);
+  bool CheckNumLineCorrectness(std::string& line);
   /**
    * @param Should be 2 line of input file
    */
-  bool CheckSecondLineCorrectness(std::string line);
-  bool CheckEventCorrectness(std::string line);
+  bool CheckSecondLineCorrectness(std::string& line);
+  bool CheckEventCorrectness(std::string& line);
   /**
    * @param Since there are 3 lines of metadata before events takes
    * vector of size 3 with those lines
    */
-  SimulationMetadata ParseHeader(std::vector<std::string> header);
-  ParsedEvent ParseEvent(std::string line);
+  SimulationMetadata ParseHeader(std::vector<std::string>& header);
+  ParsedEvent ParseEvent(std::string& line);
 };
 
 #endif // PARSER_H

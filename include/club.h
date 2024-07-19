@@ -22,7 +22,7 @@ class Club{
  public:
   Club(int desks_count);
   bool CheckIfDeskIsFree(int index);
-  bool CheckIfClientInClub(std::string name);
+  bool CheckIfClientInClub(std::string& name);
   bool CheckIfThereAreFreePlaces();
   bool CheckIfQueueIsTooBig();
   std::set<std::string> GetRemainingClientNames();
@@ -31,11 +31,11 @@ class Club{
    * Delegates work MoveClientBetweenDesks or LandClientToDesk depending on
    * location of client(queue or some table).
    */
-  void MoveClient(int index, std::string client, Time event_time,
+  void MoveClient(int index, std::string& client, Time event_time,
                   int hourly_rate, std::function<void(Time, Event, std::string, int)>
                   print_event_callback);
-  void AddClientToQueue(std::string client);
-  void RemoveClient(std::string client, Time event_time, int hourly_rate,
+  void AddClientToQueue(std::string& client);
+  void RemoveClient(std::string& client, Time event_time, int hourly_rate,
                     std::function<void(Time, Event, std::string, int)>
                     print_event_callback);
   /**
@@ -48,12 +48,12 @@ class Club{
    * Keeps it empty if queue is empty.
    */
   void TakeEmptyDesk(int index, Time event_time,
-                      std::function<void(Time, Event, std::string, int)>
+                      std::function<void(Time, Event, std::string, int)>&
                       print_event_callback);
-  void MoveClientBetweenDesks(int index, std::string client, Time event_time,
+  void MoveClientBetweenDesks(int index, std::string& client, Time event_time,
                   int hourly_rate, std::function<void(Time, Event, std::string, int)>
                                                     print_event_callback);
-  void LandClientToDesk(int index, std::string client, Time event_time);
+  void LandClientToDesk(int index, std::string& client, Time event_time);
   /**
    * @brief Changes revenue and busy time of desk.
    * Should be invoked every time client helded deck changes it's place.

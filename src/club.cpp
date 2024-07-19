@@ -2,7 +2,7 @@
 
 Club::Club(int desks_count): desks(std::vector<Desk>(desks_count)){};
 
-bool Club::CheckIfClientInClub(std::string name){
+bool Club::CheckIfClientInClub(std::string& name){
   for(auto const client_pair:clients_queue){
     if(client_pair.first == name) return true;
   }
@@ -42,7 +42,7 @@ void Club::ChangeDeskValues(int index,  Time diff, int hourly_rate){
 }
 
 void Club::TakeEmptyDesk(int index, Time event_time,
-                          std::function<void(Time, Event, std::string, int)>
+                          std::function<void(Time, Event, std::string, int)>&
                           print_event_callback){
   if(clients_queue.size() > 0){
     std::pair<std::string, Client> new_client = clients_queue.front();
@@ -55,7 +55,7 @@ void Club::TakeEmptyDesk(int index, Time event_time,
   else desks[index].client_is_present = false;
 }
 
-void Club::MoveClientBetweenDesks(int index, std::string client, Time event_time,
+void Club::MoveClientBetweenDesks(int index, std::string& client, Time event_time,
                        int hourly_rate, std::function<void(Time, Event, std::string, int)>
                                                         print_event_callback){
   Time time_diff = event_time - playing_clients[client].GetLastSitTime();
@@ -65,7 +65,7 @@ void Club::MoveClientBetweenDesks(int index, std::string client, Time event_time
   TakeEmptyDesk(index, event_time, print_event_callback);
 }
 
-void Club::RemoveClient(std::string client, Time event_time, int hourly_rate,
+void Club::RemoveClient(std::string& client, Time event_time, int hourly_rate,
                         std::function<void(Time, Event, std::string, int)>
                         print_event_callback){
   if(playing_clients.find(client) != playing_clients.end()){
@@ -94,11 +94,11 @@ void Club::EndDay(Time day_end_time, int hourly_rate){
   }
 }
 
-void Club::AddClientToQueue(std::string client){
+void Club::AddClientToQueue(std::string& client){
   clients_queue.push_back({client, Client()});
 }
 
-void Club::LandClientToDesk(int index, std::string client, Time event_time){
+void Club::LandClientToDesk(int index, std::string& client, Time event_time){
   for(auto iter = clients_queue.begin(); iter < clients_queue.end(); iter++){
     if(iter->first == client){
       iter->second.ChangeDesk(index, event_time);
@@ -110,7 +110,7 @@ void Club::LandClientToDesk(int index, std::string client, Time event_time){
   }
 }
 
-void Club::MoveClient(int index, std::string client, Time event_time,
+void Club::MoveClient(int index, std::string& client, Time event_time,
                       int hourly_rate, std::function<void(Time, Event, std::string, int)>
                       print_event_callback){
   if(playing_clients.find(client) != playing_clients.end()){

@@ -28,6 +28,6 @@ void output_handler::PrintEndOfDayData(std::vector<Desk> desks){
   }
 }
 
-void output_handler::PrintInvalidLine(std::string line){
+void output_handler::PrintInvalidLine(std::string& line){
   std::cout << line << std::endl;
 }
